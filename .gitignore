@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+
+# Secrets
+.env
+.env.local
+.env.*.local
+.spotify_cache
+
+# Data (large files)
+data/songs.csv
+data/fragrances.csv
+
+# Model checkpoints (large)
+checkpoints/*.pt
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Next.js
+site/.next/
+site/node_modules/
+site/.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/

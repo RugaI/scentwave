@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #FFD700;
+  --purple: #8B00FF;
+  --cyan: #00CED1;
+  --pink: #FF69B4;
+  --bg: #0a0a0a;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  background: var(--bg);
+  color: #ffffff;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: #8B00FF44; border-radius: 2px; }
+
+/* Glassmorphism card */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Gold shimmer text */
+.text-shimmer {
+  background: linear-gradient(
+    120deg,
+    #FFD700 0%, #FFA500 25%, #FFD700 50%, #FFEC8B 75%, #FFD700 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Glow effects */
+.glow-gold { filter: drop-shadow(0 0 20px #FFD70066); }
+.glow-purple { filter: drop-shadow(0 0 20px #8B00FF66); }
+.glow-cyan { filter: drop-shadow(0 0 20px #00CED166); }
+
+/* Note pill */
+.note-pill {
+  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s;
+}
+.note-pill:hover {
+  background: rgba(255, 215, 0, 0.12);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+/* Gradient borders */
+.border-gold-gradient {
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+.border-gold-gradient::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #FFD700, #8B00FF, #00CED1);
+  z-index: -1;
+}
+
+/* Spotify embed dark override */
+.spotify-embed iframe {
+  border-radius: 12px;
+}
+
+/* Search input */
+.search-input {
+  @apply w-full bg-transparent outline-none text-white placeholder-white/30;
+  font-size: 1.1rem;
+}
+
+/* Result card hover */
+.result-card {
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.result-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(139, 0, 255, 0.5);
+}

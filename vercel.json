@@ -1,0 +1,9 @@
+{
+  "buildCommand": "cd site && npm run build",
+  "outputDirectory": "site/.next",
+  "installCommand": "cd site && npm install",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_BACKEND_URL": "@scentwave_backend_url"
+  }
+}
