@@ -15,12 +15,11 @@ build/
 .env.*.local
 .spotify_cache
 
-# Data (large files)
-data/songs.csv
-data/fragrances.csv
+# Data (raw HuggingFace cache only — CSV files are tracked)
+data/hf_raw/
 
-# Model checkpoints (large)
-checkpoints/*.pt
+# Model checkpoints — tracked for Railway deployment (best.pt is ~10 MB)
+# checkpoints/*.pt
 
 # Jupyter
 .ipynb_checkpoints/
