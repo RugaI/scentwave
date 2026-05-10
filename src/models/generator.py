@@ -173,20 +173,20 @@ class GenerationHead(nn.Module):
         out = self(latent, emotion)
         formula = out["formula"][0].cpu().numpy()
 
-        def extract(indices):
-            # Sort by weight desc, take top_k_per_layer then filter by threshold
+        def extract(indices, sharpness: float = 4.0):
             scored = [(i, float(formula[i])) for i in indices]
             scored.sort(key=lambda x: -x[1])
             top_k = scored[:top_k_per_layer]
-            # Normalise these selected notes so they sum nicely for display
-            total = sum(w for _, w in top_k) + 1e-8
+            # Raise to power to separate dominant notes from minor ones
+            sharpened = [(i, w ** sharpness) for i, w in top_k]
+            total = sum(w for _, w in sharpened) + 1e-8
             notes = []
-            for i, w in top_k:
+            for i, w in sharpened:
                 pct = round(w / total * 100, 1)
-                if pct >= 5.0:  # at least 5% share within layer
+                if pct >= 5.0:
                     notes.append((CANONICAL_NOTES[i].replace("_", " ").title(), pct))
             if not notes:  # fallback: always show at least top-3
-                for i, w in top_k[:3]:
+                for i, w in sharpened[:3]:
                     pct = round(w / total * 100, 1)
                     notes.append((CANONICAL_NOTES[i].replace("_", " ").title(), pct))
             return notes

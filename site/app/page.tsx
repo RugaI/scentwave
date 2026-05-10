@@ -17,7 +17,7 @@ interface AnalysisResult {
   retrieved: any[]
   generated: any
 }
-interface SearchResult { track_id: string | null; name: string; artist: string; genre: string }
+interface SearchResult { track_id: string | null; name: string; artist: string; genre: string; artist_id?: string; popularity?: number; mode?: number; from_spotify?: boolean }
 
 // ── Quick presets ─────────────────────────────────────────────────────────────
 const PRESETS = [
@@ -66,17 +66,18 @@ function Particles() {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function Home() {
-  const [song, setSong]         = useState('')
-  const [artist, setArtist]     = useState('')
-  const [loading, setLoading]   = useState(false)
-  const [result, setResult]     = useState<AnalysisResult | null>(null)
-  const [error, setError]       = useState('')
-  const [suggestions, setSugs]  = useState<SearchResult[]>([])
-  const [showSugs, setShowSugs] = useState(false)
-  const [formulaNum]            = useState(() => Math.floor(Math.random() * 9000 + 1000))
-  const resultsRef              = useRef<HTMLDivElement>(null)
-  const searchRef               = useRef<HTMLDivElement>(null)
-  const debounceRef             = useRef<NodeJS.Timeout | null>(null)
+  const [song, setSong]             = useState('')
+  const [artist, setArtist]         = useState('')
+  const [loading, setLoading]       = useState(false)
+  const [result, setResult]         = useState<AnalysisResult | null>(null)
+  const [error, setError]           = useState('')
+  const [suggestions, setSugs]      = useState<SearchResult[]>([])
+  const [showSugs, setShowSugs]     = useState(false)
+  const [selectedMeta, setSelectedMeta] = useState<Partial<SearchResult>>({})
+  const [formulaNum]                = useState(() => Math.floor(Math.random() * 9000 + 1000))
+  const resultsRef                  = useRef<HTMLDivElement>(null)
+  const searchRef                   = useRef<HTMLDivElement>(null)
+  const debounceRef                 = useRef<NodeJS.Timeout | null>(null)
 
   // Live search suggestions
   const fetchSuggestions = useCallback(async (q: string) => {
@@ -91,6 +92,7 @@ export default function Home() {
 
   const onSongChange = (val: string) => {
     setSong(val)
+    setSelectedMeta({})
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => fetchSuggestions(val), 300)
   }
@@ -98,6 +100,7 @@ export default function Home() {
   const selectSuggestion = (s: SearchResult) => {
     setSong(s.name)
     setArtist(s.artist)
+    setSelectedMeta({ track_id: s.track_id ?? undefined, artist_id: s.artist_id, popularity: s.popularity, mode: s.mode })
     setShowSugs(false)
     setSugs([])
   }
@@ -122,7 +125,14 @@ export default function Home() {
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ song: songName, artist: artistName }),
+        body: JSON.stringify({
+          song: songName,
+          artist: artistName,
+          track_id:  selectedMeta.track_id  ?? null,
+          artist_id: selectedMeta.artist_id ?? null,
+          popularity: selectedMeta.popularity ?? 50,
+          mode: selectedMeta.mode ?? 1,
+        }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.detail || 'Analysis failed')

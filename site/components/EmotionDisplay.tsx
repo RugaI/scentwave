@@ -11,23 +11,28 @@ interface Emotion {
 interface Props { emotion: Emotion }
 
 const LABELS: Record<string, string> = {
-  valence: 'Valence',
-  arousal: 'Arousal',
-  dominance: 'Dominance',
+  valence:   'Mood',
+  arousal:   'Energy',
+  dominance: 'Intensity',
+}
+const SUBLABELS: Record<string, string> = {
+  valence:   'Happy ↔ Melancholic',
+  arousal:   'Electric ↔ Serene',
+  dominance: 'Bold ↔ Delicate',
 }
 const COLORS: Record<string, string> = {
-  valence: '#FFD700',
-  arousal: '#FF69B4',
+  valence:   '#FFD700',
+  arousal:   '#FF69B4',
   dominance: '#8B00FF',
 }
 const ICONS: Record<string, string> = {
-  valence: '☀',
-  arousal: '⚡',
+  valence:   '☀',
+  arousal:   '⚡',
   dominance: '♦',
 }
 const DESCRIPTIONS: Record<string, (v: number) => string> = {
-  valence: v => v > 0.65 ? 'Joyful & bright' : v > 0.40 ? 'Balanced' : 'Melancholic & deep',
-  arousal: v => v > 0.65 ? 'Energetic & electric' : v > 0.40 ? 'Moderate' : 'Calm & serene',
+  valence:   v => v > 0.65 ? 'Joyful & bright' : v > 0.40 ? 'Bittersweet' : 'Melancholic & deep',
+  arousal:   v => v > 0.65 ? 'Energetic & electric' : v > 0.40 ? 'Gently flowing' : 'Calm & serene',
   dominance: v => v > 0.65 ? 'Powerful & bold' : v > 0.40 ? 'Grounded' : 'Delicate & soft',
 }
 
@@ -79,9 +84,12 @@ export default function EmotionDisplay({ emotion }: Props) {
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2">
                   <span style={{ color: COLORS[key] }} className="text-sm">{ICONS[key]}</span>
-                  <span className="text-white/70 text-xs font-medium uppercase tracking-wider">
-                    {LABELS[key]}
-                  </span>
+                  <div>
+                    <span className="text-white/90 text-xs font-semibold uppercase tracking-wider">
+                      {LABELS[key]}
+                    </span>
+                    <span className="text-white/30 text-[9px] ml-1.5">{SUBLABELS[key]}</span>
+                  </div>
                 </div>
                 <span className="text-xs font-bold" style={{ color: COLORS[key] }}>
                   {pct}%
